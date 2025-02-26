@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ArrowLeft,
   Calendar,
@@ -24,7 +22,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useRouter } from "next/router";
 
 // Sample product data
 const products = [
@@ -221,11 +218,10 @@ const losersData = [
   },
 ];
 
-export default function ProductDetails() {
-  const router = useRouter();
+export default function ProductDetails({ params }: { params: { id: string } }) {
 
   const product = products.find(
-    (p) => p.id === Number.parseInt(String(router.query.id) ?? "1")
+    (p) => p.id === Number.parseInt(params.id)
   );
 
   if (!product) {
