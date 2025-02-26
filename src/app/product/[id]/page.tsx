@@ -200,7 +200,13 @@ const losersData = [
   },
 ]
 
-export default function ProductDetails({ params }: { params: { id: string } }) {
+type ProductDetailsPageProps = {
+  params: {
+    id: string
+  }
+}
+
+export default function ProductDetails({ params }: ProductDetailsPageProps) {
   const product = products.find((p) => p.id === Number.parseInt(params.id))
 
   if (!product) {
