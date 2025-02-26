@@ -220,8 +220,8 @@ const losersData = [
 
 type tParams = Promise<{ id: string }>;
 
-export default async function ProductDetails(props: { params: tParams }) {
-  const { id } =  await props.params;
+export default async function ProductDetails({params}: {params: tParams}) {
+  const { id } =  await params;
   const product = products.find(
     (p) => p.id === Number.parseInt(id)
   );
