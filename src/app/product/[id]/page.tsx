@@ -1,11 +1,30 @@
-"use client"
+"use client";
 
-import { ArrowLeft, Calendar, ShoppingCart, Compass, FileText } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import {
+  ArrowLeft,
+  Calendar,
+  ShoppingCart,
+  Compass,
+  FileText,
+} from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useRouter } from "next/router";
 
 // Sample product data
 const products = [
@@ -132,18 +151,20 @@ const products = [
       excessLiquidity: 2154.38,
     },
   },
-]
+];
 
 const gainersData = [
   {
     client: "TT_SS",
-    security: "Bond, (Default) Issuer: Perisai Capital Labuan Inc, Coupon: 6.875%, Maturity Date: 03-OCT-2016",
+    security:
+      "Bond, (Default) Issuer: Perisai Capital Labuan Inc, Coupon: 6.875%, Maturity Date: 03-OCT-2016",
     percentageContribution: "16.29%",
     totalPL: "232.45 K",
   },
   {
     client: "PK_SC",
-    security: "Exchange Traded Fund, Issuer: ESC ETF ISHARES MSCI RUSSIA BE ESC; Custodian: Bank of New York",
+    security:
+      "Exchange Traded Fund, Issuer: ESC ETF ISHARES MSCI RUSSIA BE ESC; Custodian: Bank of New York",
     percentageContribution: "9.17%",
     totalPL: "130.92 K",
   },
@@ -165,7 +186,7 @@ const gainersData = [
     percentageContribution: "4.67%",
     totalPL: "66.75 K",
   },
-]
+];
 
 const losersData = [
   {
@@ -198,19 +219,17 @@ const losersData = [
     percentageContribution: "3.39%",
     totalPL: "-1.28 M",
   },
-]
+];
 
-type ProductDetailsPageProps = {
-  params: {
-    id: string
-  }
-}
+export default function ProductDetails() {
+  const router = useRouter();
 
-export default function ProductDetails({ params }: ProductDetailsPageProps) {
-  const product = products.find((p) => p.id === Number.parseInt(params.id))
+  const product = products.find(
+    (p) => p.id === Number.parseInt(String(router.query.id) ?? "1")
+  );
 
   if (!product) {
-    return <div>Product not found</div>
+    return <div>Product not found</div>;
   }
 
   return (
@@ -219,7 +238,9 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
         {/* Sidebar */}
         <aside className="w-96 bg-muted p-6 h-screen sticky top-0 overflow-y-auto">
           <h2 className="text-xl font-semibold mb-4">{product.title}</h2>
-          <p className="text-sm text-muted-foreground mb-6">{product.description}</p>
+          <p className="text-sm text-muted-foreground mb-6">
+            {product.description}
+          </p>
 
           <Card className="mb-4">
             <CardHeader>
@@ -227,8 +248,9 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">
-                This report provides a comprehensive overview of the {product.title} product, including account
-                information, margin summary, top gainers, and losers.
+                This report provides a comprehensive overview of the{" "}
+                {product.title} product, including account information, margin
+                summary, top gainers, and losers.
               </p>
             </CardContent>
           </Card>
@@ -264,7 +286,9 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
 
           <Accordion type="single" collapsible className="w-full space-y-4">
             <AccordionItem value="account-info">
-              <AccordionTrigger className="text-lg font-semibold">Account Information</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-semibold">
+                Account Information
+              </AccordionTrigger>
               <AccordionContent>
                 <Table>
                   <TableBody>
@@ -282,7 +306,9 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
             </AccordionItem>
 
             <AccordionItem value="margin-summary">
-              <AccordionTrigger className="text-lg font-semibold">Margin Summary</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-semibold">
+                Margin Summary
+              </AccordionTrigger>
               <AccordionContent>
                 <Table>
                   <TableHeader>
@@ -292,21 +318,23 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {Object.entries(product.marginSummary).map(([key, value]) => (
-                      <TableRow key={key}>
-                        <TableCell className="font-medium capitalize">
-                          {key.replace(/([A-Z])/g, " $1").trim()}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {typeof value === "number"
-                            ? value.toLocaleString("en-US", {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                              })
-                            : value}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {Object.entries(product.marginSummary).map(
+                      ([key, value]) => (
+                        <TableRow key={key}>
+                          <TableCell className="font-medium capitalize">
+                            {key.replace(/([A-Z])/g, " $1").trim()}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {typeof value === "number"
+                              ? value.toLocaleString("en-US", {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })
+                              : value}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
                   </TableBody>
                 </Table>
               </AccordionContent>
@@ -316,7 +344,9 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
               <AccordionTrigger className="text-lg font-semibold">
                 <div className="flex justify-between w-full pr-6">
                   <span>Gainers</span>
-                  <span className="text-primary text-sm">Total Gainers: 579.8 K</span>
+                  <span className="text-primary text-sm">
+                    Total Gainers: 579.8 K
+                  </span>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -325,7 +355,9 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
                     <TableRow>
                       <TableHead>Client</TableHead>
                       <TableHead>Security</TableHead>
-                      <TableHead className="text-right">Percentage Contribution</TableHead>
+                      <TableHead className="text-right">
+                        Percentage Contribution
+                      </TableHead>
                       <TableHead className="text-right">Total PL</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -334,8 +366,12 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
                       <TableRow key={index}>
                         <TableCell>{item.client}</TableCell>
                         <TableCell>{item.security}</TableCell>
-                        <TableCell className="text-right text-primary">{item.percentageContribution}</TableCell>
-                        <TableCell className="text-right font-medium text-primary">{item.totalPL}</TableCell>
+                        <TableCell className="text-right text-primary">
+                          {item.percentageContribution}
+                        </TableCell>
+                        <TableCell className="text-right font-medium text-primary">
+                          {item.totalPL}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -347,7 +383,9 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
               <AccordionTrigger className="text-lg font-semibold">
                 <div className="flex justify-between w-full pr-6">
                   <span>Losers</span>
-                  <span className="text-destructive text-sm">Total Losers: -20.05 M</span>
+                  <span className="text-destructive text-sm">
+                    Total Losers: -20.05 M
+                  </span>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -356,7 +394,9 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
                     <TableRow>
                       <TableHead>Client</TableHead>
                       <TableHead>Security</TableHead>
-                      <TableHead className="text-right">Percentage Contribution</TableHead>
+                      <TableHead className="text-right">
+                        Percentage Contribution
+                      </TableHead>
                       <TableHead className="text-right">Total PL</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -365,8 +405,12 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
                       <TableRow key={index}>
                         <TableCell>{item.client}</TableCell>
                         <TableCell>{item.security}</TableCell>
-                        <TableCell className="text-right text-destructive">{item.percentageContribution}</TableCell>
-                        <TableCell className="text-right font-medium text-destructive">{item.totalPL}</TableCell>
+                        <TableCell className="text-right text-destructive">
+                          {item.percentageContribution}
+                        </TableCell>
+                        <TableCell className="text-right font-medium text-destructive">
+                          {item.totalPL}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -375,13 +419,15 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
             </AccordionItem>
 
             <AccordionItem value="legal-notes">
-              <AccordionTrigger className="text-lg font-semibold">Legal Notes</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-semibold">
+                Legal Notes
+              </AccordionTrigger>
               <AccordionContent>
                 <div className="text-sm text-muted-foreground">
                   <p>Generated: {new Date().toLocaleString()}</p>
                   <p className="mt-2">
-                    This is a system-generated report. All values are shown in the account&apos;s base currency unless
-                    otherwise noted.
+                    This is a system-generated report. All values are shown in
+                    the account&apos;s base currency unless otherwise noted.
                   </p>
                 </div>
               </AccordionContent>
@@ -390,6 +436,5 @@ export default function ProductDetails({ params }: ProductDetailsPageProps) {
         </main>
       </div>
     </div>
-  )
+  );
 }
-
