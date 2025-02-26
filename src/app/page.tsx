@@ -1,20 +1,17 @@
-"use client"
-
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { Input } from "@/components/input";
+import { AuroraText } from "@/components/magicui/aurora-text";
+import { DotPattern } from "@/components/magicui/dot-pattern";
+import Navbar from "@/components/navbar";
+import Link from "next/link";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { FormEvent, useState } from "react"
-import { DotPattern } from "@/components/magicui/dot-pattern"
-
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import React from "react";
 const products = [
   {
     id: 1,
@@ -34,44 +31,27 @@ const products = [
     description: "Secure your future with our expert retirement planning.",
     tags: ["Retirement", "Planning"],
   },
-]
-
+];
 export default function Page() {
-  const router = useRouter()
-  const [searchQuery, setSearchQuery] = useState("")
-
-  const handleSearch = (e: FormEvent) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery)}`)
-    }
-  }
-
   return (
-    <>
-      <DotPattern glow={true} width={20} height={20} />
-      <div className="relative p-8 max-w-6xl mx-auto flex items-center justify-center min-h-screen">
-        <div className="flex flex-col items-center gap-y-8">
-          <h2 className="text-6xl font-semibold">
-            Financial <span className="text-primary">Markets</span>
-          </h2>
-          <form onSubmit={handleSearch} className="flex gap-x-4 w-full max-w-md">
-            <Input
-              placeholder="Enter your product name"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Button type="submit">Search</Button>
-          </form>
-          {/* Product List */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="h-screen w-screen">
+      <DotPattern width={20} height={20} />
+      <div className="max-w-4xl mx-auto h-full">
+        <Navbar />
+        <div className="flex flex-col justify-center items-center h-full gap-16">
+          <h1 className="text-5xl font-bold tracking-wide leading-tight text-center">
+            Everything your <br /> <AuroraText>Relationship Manager</AuroraText>{" "}
+            needs
+          </h1>
+          <Input />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 z-10">
             {products.map((product) => (
               <Link
                 href={`/product/${product.id}`}
                 key={product.id}
                 className="block"
               >
-                <Card className="h-full hover:shadow-lg transition-shadow">
+                <Card className="h-full bg-white hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle>{product.title}</CardTitle>
                     <CardDescription>{product.description}</CardDescription>
@@ -91,6 +71,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </>
-  )
+    </div>
+  );
 }
